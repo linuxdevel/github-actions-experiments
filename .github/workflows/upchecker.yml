@@ -25,7 +25,7 @@ jobs:
             if [[ "$url" == *.crl ]]; then
               echo "Checking CRL"
               # Download and check CRL validity
-              if ! curl -f -o mycrl.crl "$url"; then
+              if ! curl -s -f -o mycrl.crl "$url"; then
                 echo "Failed to download CRL $url"
                 exit 1
               fi
