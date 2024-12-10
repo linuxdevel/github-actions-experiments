@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Ensure OpenSSL is installed (Ubuntu)
+        run: sudo apt-get update && sudo apt-get install -y openssl
       - name: Check URLs
         run: |
           urls=("https://pki.esign.bankid.no/bankidrootcag2.crl" 
@@ -20,15 +22,34 @@ jobs:
                 "https://pki.esign.bankid.no/bankidbankaxeptqtsa-ca1a.crl")
                 
           for url in "${urls[@]}"; do
-            status=$(curl -o /dev/null -s -w "%{http_code}\n" "$url")
-            if [ "$status" -ne 200 ]; then
-              echo "URL $url is down (status code: $status)"
-              exit 1
+            if [[ "$url" == *.crl ]]; then
+              echo "Checking CRL"
+              # Download and check CRL validity
+              if ! curl -f -o mycrl.crl "$url"; then
+                echo "Failed to download CRL $url"
+                exit 1
+              fi
+              next_update=$(openssl crl -in mycrl.crl -noout -nextupdate | cut -d= -f2)
+              current_date=$(date -u +"%b %d %H:%M:%S %Y GMT")
+              if [[ "$current_date" > "$next_update" ]]; then
+                echo "CRL $url is expired (next update: $next_update)"
+                exit 1
+              else
+                echo "CRL $url is valid (next update: $next_update)"
+              fi
             else
-              echo "URL $url is up (status code: $status)"
+              # Check HTTP status
+              echo "Checking certificate"
+              status=$(curl -o /dev/null -s -w "%{http_code}\n" "$url")
+              if [ "$status" -ne 200 ]; then
+                echo "URL $url is down (status code: $status)"
+                exit 1
+              else
+                echo "URL $url is up (status code: $status)"
+              fi
             fi
-          done
-#      - name: Send email on failure
+          done      
+#          - name: Send email on failure
 #        if: failure()
 #        uses: actions/github-script@v6
 #        with:
