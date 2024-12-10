@@ -16,8 +16,8 @@ jobs:
         run: |
           urls=("https://pki.esign.bankid.no/bankidrootcag2.crl" 
                 "https://pki.esign.bankid.no/bankidrootcag2.crt"
-                "https://pki.esign.bankid.no/bankidbankaxeptqtsa-ca1a.crt"
-                "https://pki.esign.bankid.no/bankidbankaxeptqtsa-ca1a.crl"
+                "https://pki.esign.bankid.no/bankidbankaxeptca1a.crt"
+                "https://pki.esign.bankid.no/bankidbankaxeptca1a.crl"
                 "https://pki.esign.bankid.no/bankidbankaxeptqtsa-ca1a.crt"
                 "https://pki.esign.bankid.no/bankidbankaxeptqtsa-ca1a.crl")
                 
