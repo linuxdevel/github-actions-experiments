@@ -1,0 +1,45 @@
+name: Check URLs
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+
+jobs:
+  check-urls:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Check URLs
+        run: |
+          urls=("https://pki.esign.bankid.no/bankidrootcag2.crl" 
+                "https://pki.esign.bankid.no/bankidrootcag2.crt"
+                "https://pki.esign.bankid.no/bankidbankaxeptqtsa-ca1a.crt"
+                "https://pki.esign.bankid.no/bankidbankaxeptqtsa-ca1a.crl"
+                "https://pki.esign.bankid.no/bankidbankaxeptqtsa-ca1a.crt"
+                "https://pki.esign.bankid.no/bankidbankaxeptqtsa-ca1a.crl")
+          for url in "${urls[@]}"; do
+            status=$(curl -o /dev/null -s -w "%{http_code}\n" "$url")
+            if [ "$status" -ne 200 ]; then
+              echo "URL $url is down (status code: $status)"
+              exit 1
+            else
+              echo "URL $url is up (status code: $status)"
+            fi
+          done
+#      - name: Send email on failure
+#        if: failure()
+#        uses: actions/github-script@v6
+#        with:
+#          script: |
+#            const sgMail = require('@sendgrid/mail');
+#            sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+#            const msg = {
+#              to: 'team@example.com',
+#              from: 'alert@example.com',
+#              subject: 'GitHub Action Failed',
+#              text: `The workflow run has failed. Check the details at ${github.context.payload.repository.html_url}/actions/runs/${github.runId}`,
+#            };
+#            sgMail.send(msg);
+#        env:
+#          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
