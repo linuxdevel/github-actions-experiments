@@ -29,9 +29,11 @@ jobs:
                 echo "Failed to download CRL $url"
                 exit 1
               fi
+              
               next_update=$(openssl crl -in mycrl.crl -noout -nextupdate | cut -d= -f2)
-              current_date=$(date -u +"%b %d %H:%M:%S %Y GMT")
-              if [[ "$current_date" > "$next_update" ]]; then
+              current_date=$(date -u +"%Y%m%d%H%M%SZ")
+              
+              if [[ "$current_date" > "$(date -u -d "$next_update" +"%Y%m%d%H%M%SZ")" ]]; then
                 echo "CRL $url is expired (next update: $next_update)"
                 exit 1
               else
