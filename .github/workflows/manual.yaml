@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Please select above the branch or tag.\n\nWhat environment do you want to install to?\nPlease choose one of the following options:\n Production, Preproduction, Staging, Devlab.'
+        description: 'Please select above the branch or tag. Please choose below what environment you want to install to?'
         required: true
         default: 'Devlab'
         type: choice
