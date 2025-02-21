@@ -1,4 +1,4 @@
-name: Manual runner
+name: Hello World
 
 on:
   workflow_dispatch:
@@ -7,19 +7,19 @@ on:
         description: 'Select the environment'
         required: true
         default: 'Devlab'
-        type: choice
+        type: string
         options:
           - Production
           - Preproduction
           - Staging
           - Devlab
+
 jobs:
-  the_job:
+  hello_world_job:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Print Environment
-      run: echo "Selected Environment: ${{ github.event.inputs.environment }}"
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Print Environment
+        run: echo "Selected Environment ${{ github.event.inputs.environment }}"
