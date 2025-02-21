@@ -1,4 +1,4 @@
-name: Hello World
+name: Manual runner
 
 on:
   workflow_dispatch:
@@ -14,12 +14,12 @@ on:
           - Staging
           - Devlab
 jobs:
-  hello_world_job:
+  the_job:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Say Hello
-      run: echo "Hello, World!"
+    - name: Print Environment
+      run: echo "Selected Environment: ${{ github.event.inputs.environment }}"
