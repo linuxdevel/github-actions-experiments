@@ -1,10 +1,10 @@
-name: Hello World
+name: Manual application installation
 
 on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Select the environment'
+        description: 'What environment do you want to install to?'
         required: true
         default: 'Devlab'
         type: choice
