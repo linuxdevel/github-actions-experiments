@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'What environment do you want to install to?'
+        description: 'What environment do you want to install to? Please choose one of the following options: Production, Preproduction, Staging, Devlab. This will determine the environment in which the workflow will run.'
         required: true
         default: 'Devlab'
         type: choice
