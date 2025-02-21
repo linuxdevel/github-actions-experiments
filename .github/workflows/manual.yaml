@@ -48,7 +48,8 @@ jobs:
           else
             echo "staging=false" >> $GITHUB_ENV
           fi
-
+      - name: Print Triggering User
+        run: echo "Workflow triggered by ${{ github.actor }}"
       - name: Print Environment Booleans
         run: |
           echo "Devlab: ${{ env.devlab }}"
