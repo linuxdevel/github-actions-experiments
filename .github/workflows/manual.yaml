@@ -23,6 +23,35 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}  # Use the ref selected by the user
-        
-      - name: Print Environment
-        run: echo "Selected Environment ${{ github.event.inputs.environment }}"
+      - name: Set Environment Booleans
+        run: |
+          if [ "${{ github.event.inputs.environment }}" == "Devlab" ]; then
+            echo "devlab=true" >> $GITHUB_ENV
+          else
+            echo "devlab=false" >> $GITHUB_ENV
+          fi
+
+          if [ "${{ github.event.inputs.environment }}" == "Production" ]; then
+            echo "production=true" >> $GITHUB_ENV
+          else
+            echo "production=false" >> $GITHUB_ENV
+          fi
+
+          if [ "${{ github.event.inputs.environment }}" == "Preproduction" ]; then
+            echo "preproduction=true" >> $GITHUB_ENV
+          else
+            echo "preproduction=false" >> $GITHUB_ENV
+          fi
+
+          if [ "${{ github.event.inputs.environment }}" == "Staging" ]; then
+            echo "staging=true" >> $GITHUB_ENV
+          else
+            echo "staging=false" >> $GITHUB_ENV
+          fi
+
+      - name: Print Environment Booleans
+        run: |
+          echo "Devlab: ${{ env.devlab }}"
+          echo "Production: ${{ env.production }}"
+          echo "Preproduction: ${{ env.preproduction }}"
+          echo "Staging: ${{ env.staging }}"
