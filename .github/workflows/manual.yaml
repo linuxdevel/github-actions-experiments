@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'What environment do you want to install to? Please choose one of the following options: Production, Preproduction, Staging, Devlab. This will determine the environment in which the workflow will run.'
+        description: 'Please select above the branch or tag.\n\nWhat environment do you want to install to?\nPlease choose one of the following options:\n Production, Preproduction, Staging, Devlab.'
         required: true
         default: 'Devlab'
         type: choice
@@ -21,5 +21,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}  # Use the ref selected by the user
+        
       - name: Print Environment
         run: echo "Selected Environment ${{ github.event.inputs.environment }}"
