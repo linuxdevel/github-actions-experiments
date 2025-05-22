@@ -2,6 +2,16 @@ name: Build OpenSSL and Update Project
 
 on:
   workflow_dispatch:
+    inputs:
+      build_target:
+        description: "Select the build target (linux, windows, or both)"
+        required: true
+        default: "both"
+        type: choice
+        options:
+          - linux
+          - windows
+          - both
 
 jobs:
   build-openssl:
@@ -27,6 +37,7 @@ jobs:
           git clone --branch OpenSSL_1_1_1-stable --depth 1 https://github.com/openssl/openssl.git openssl-src
           
       - name: Build OpenSSL for Linux
+        if: ${{ inputs.build_target == 'linux' || inputs.build_target == 'both' }}
         run: |
           cd openssl-src
           ./config no-shared --prefix=$GITHUB_WORKSPACE/openssl/linux_x86-64
@@ -34,9 +45,10 @@ jobs:
           make install
 
       - name: Build OpenSSL for Windows (64-bit)
+        if: ${{ inputs.build_target == 'windows' || inputs.build_target == 'both' }}
         run: |
           cd openssl-src
-          ./Configure mingw64 no-shared --prefix=$GITHUB_WORKSPACE/openssl/windows_x86-64
+          ./Configure mingw64 no-shared no-asm --prefix=$GITHUB_WORKSPACE/openssl/windows_x86-64
           make -j$(nproc) CC=x86_64-w64-mingw32-gcc
           make install
 
