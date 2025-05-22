@@ -24,10 +24,8 @@ jobs:
           git checkout -b add-openssl-binaries
       - name: Download OpenSSL source
         run: |
-          curl -O https://www.openssl.org/source/openssl-1.1.1.tar.gz
-          tar -xzf openssl-1.1.1.tar.gz
-          mv openssl-1.1.1 openssl-src
-      
+          git clone --branch OpenSSL_1_1_1-stable --depth 1 https://github.com/openssl/openssl.git openssl-src
+          
       - name: Build OpenSSL for Linux
         run: |
           cd openssl-src
