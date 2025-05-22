@@ -47,6 +47,7 @@ jobs:
       - name: Build OpenSSL for Windows (64-bit)
         if: ${{ inputs.build_target == 'windows' || inputs.build_target == 'both' }}
         run: |
+          export PATH=$PATH:/usr/x86_64-w64-mingw32/bin
           cd openssl-src
           ./Configure mingw64 no-shared no-asm --prefix=$GITHUB_WORKSPACE/openssl/windows_x86-64
           make -j$(nproc) CC=x86_64-w64-mingw32-gcc
